@@ -1,11 +1,15 @@
 package com.emreduver.messageapplication.utilities
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.emreduver.messageapplication.constants.Messages
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.token.Token
 import com.google.gson.Gson
+import org.json.JSONObject
 import retrofit2.Response
+
 
 class HelperService {
 
@@ -42,10 +46,14 @@ class HelperService {
 
         fun <T1, T2> handleApiError(response: Response<T2>): ApiResult<T1> {
 
+            var getData: ApiResult<Unit>? = null
             var errorMessage = ""
 
             if (response.errorBody() != null) {
-                errorMessage = response.errorBody()!!.string()
+                val errorBody = response.errorBody()!!.string()
+                getData = Gson().fromJson(errorBody, ApiResult::class.java) as ApiResult<Unit>?
+                errorMessage = getData!!.Message!!
+                Log.i("OkHttp", errorMessage)
             }
 
             return ApiResult(false, null, errorMessage)
@@ -55,27 +63,21 @@ class HelperService {
             return when (ex) {
 
                 is OfflineException -> {
-                    var exceptionMessage = Messages.OfflineException
-                    ApiResult(false,null,exceptionMessage)
+                    val exceptionMessage = Messages.OfflineException
+                    ApiResult(false, null, exceptionMessage)
                 }
                 else -> {
-                    var exceptionMessage = Messages.NotDefinedException
-                    ApiResult(false,null,exceptionMessage)
+                    val exceptionMessage = Messages.NotDefinedException
+                    ApiResult(false, null, exceptionMessage)
                 }
             }
         }
 
-        /*fun showErrorMessageByToast(apiGenericError: APIGenericError?) {
+        fun showErrorMessageByToast(errorMessage:String) {
 
-            if (apiGenericError == null) return
-            var errorBuilder = StringBuilder()
+            if (errorMessage.isNullOrEmpty()) return
 
-            if (apiGenericError.error!!.IsShow) {
-                for (error in apiGenericError.error!!.Errors) {
-                    errorBuilder.append(error + "\n")
-                }
-            }
-            Toast.makeText(GlobalApp.getAppContext(), errorBuilder.toString(), Toast.LENGTH_SHORT).show()
-        }*/
+            Toast.makeText(GlobalApp.getAppContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 }

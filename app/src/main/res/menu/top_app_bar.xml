@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:contentDescription="content_description_search"
+        android:icon="@drawable/outline_search_24"
+        android:title="search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/newMessage"
+        android:contentDescription="content_description_more"
+        android:title="Yeni Mesaj"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:title="Ayarlar" />
+
+</menu>

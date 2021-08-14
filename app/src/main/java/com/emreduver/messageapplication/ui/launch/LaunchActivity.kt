@@ -27,6 +27,7 @@ class LaunchActivity : AppCompatActivity() {
                 }
             }
             startActivity(intent)
+            finish()
         })
     }
 }

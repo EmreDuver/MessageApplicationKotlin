@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -16,7 +19,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    dataBinding {
+        enabled = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -57,4 +62,20 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+
+    //Yuvarlak çerçeve
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
+    //resim yükleme
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //material design
+    implementation 'com.google.android.material:material:1.4.0'
+
+    //Fragment Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+
+    //SignalR
+    implementation 'com.microsoft.signalr:signalr:1.0.0'
 }
