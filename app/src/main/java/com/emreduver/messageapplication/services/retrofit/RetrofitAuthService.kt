@@ -8,6 +8,7 @@ import com.emreduver.messageapplication.entities.send.auth.Register
 import com.emreduver.messageapplication.entities.receive.token.Token
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RetrofitAuthService {
@@ -23,4 +24,7 @@ interface RetrofitAuthService {
 
     @POST(RetrofitUrl.Logout)
     suspend fun logout(@Body refreshToken:String) : Response<ApiResult<Unit>>
+
+    @GET(RetrofitUrl.CheckToken)
+    suspend fun checkToken() : Response<ApiResult<Unit>>
 }

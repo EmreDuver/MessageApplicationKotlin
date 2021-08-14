@@ -1,7 +1,10 @@
 package com.emreduver.messageapplication.services.retrofit
 
+import com.emreduver.messageapplication.utilities.interceptors.NetworkInterceptor
+import com.emreduver.messageapplication.utilities.interceptors.TokenInterceptor
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -12,11 +15,11 @@ class ApiClient {
         fun <T> buildService(baseUrl: String, retrofitService: Class<T>, existInterceptor: Boolean) : T{
 
             val clientBuilder = OkHttpClient.Builder()
-            //clientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-            //clientBuilder.addInterceptor(NetworkInterceptor());
+            clientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+            clientBuilder.addInterceptor(NetworkInterceptor());
 
             if (existInterceptor){
-                //clientBuilder.addInterceptor(TokenInterceptor())
+                clientBuilder.addInterceptor(TokenInterceptor())
             }
             val gson = GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")

@@ -6,5 +6,6 @@ data class Token(
     @SerializedName("accessToken") val AccessToken: String,
     @SerializedName("accessTokenExpiration") val AccessTokenExpiration: Long,
     @SerializedName("refreshToken") val RefreshToken: String,
-    @SerializedName("refreshTokenExpiration") val RefreshTokenExpiration: Long
+    @SerializedName("refreshTokenExpiration") val RefreshTokenExpiration: Long,
+    @SerializedName("userId") val UserId: String
 )
