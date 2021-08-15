@@ -2,11 +2,14 @@ package com.emreduver.messageapplication.utilities
 
 import android.content.Context
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
+import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.constants.Messages
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.token.Token
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -78,6 +81,12 @@ class HelperService {
             if (message.isNullOrEmpty()) return
 
             Toast.makeText(GlobalApp.getAppContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        fun loadImageFromPicasso(url: String, imageView: ImageView){
+            val baseImageUrl = "${Api.baseImageURL}/userImages/${url}"
+            Picasso.get().load(baseImageUrl).into(imageView);
+            Log.i("Message", baseImageUrl)
         }
     }
 }

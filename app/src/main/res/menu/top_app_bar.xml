@@ -9,12 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/newMessageMainScreen"
-        android:title="Yeni Mesaj"
+        android:id="@+id/settingsMainScreen"
+        android:title="Ayarlar"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/settingsMainScreen"
-        android:title="Ayarlar" />
+        android:id="@+id/logoutMainScreen"
+        android:title="Çıkış Yap" />
 
 </menu>

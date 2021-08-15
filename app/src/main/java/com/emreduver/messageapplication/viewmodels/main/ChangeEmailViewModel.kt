@@ -4,21 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emreduver.messageapplication.services.api.AuthService
+import com.emreduver.messageapplication.entities.send.user.EmailChangeDto
+import com.emreduver.messageapplication.services.api.UserService
 import com.emreduver.messageapplication.utilities.IViewModelState
 import com.emreduver.messageapplication.utilities.LoadingState
 import kotlinx.coroutines.launch
 
-class MainScreenViewModel : ViewModel(), IViewModelState {
+class ChangeEmailViewModel : ViewModel(), IViewModelState {
     override var loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
     override var errorState: MutableLiveData<String> = MutableLiveData<String>()
 
-    fun logout(): LiveData<Boolean> {
+    fun emailChangeRequest(emailChangeDto: EmailChangeDto): LiveData<Boolean> {
         loadingState.value = LoadingState.Loading
         val status = MutableLiveData<Boolean>()
 
         viewModelScope.launch {
-            val response = AuthService.logout()
+            val response = UserService.emailChangeRequest(emailChangeDto)
             status.value = response.Success
             loadingState.value = LoadingState.Loaded
             if (!response.Success)

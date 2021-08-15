@@ -58,7 +58,7 @@ class RegisterFragment : Fragment() {
             if (it) {
                 MaterialAlertDialogBuilder(view.context)
                     .setTitle("Kayıt Başarılı")
-                    .setMessage("Kaydınız başarılıyla tamamlandı. Uygulamaya giriş yapmak için emailinze gönderilen maili doğrulayınız.")
+                    .setMessage("Kaydınız başarılıyla tamamlandı. Uygulamaya giriş yapmak için eposta adresinize gönderilen maili doğrulayınız.")
                     .setPositiveButton("Harika") { dialog, which ->
                         val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
                         findNavController().navigate(action)

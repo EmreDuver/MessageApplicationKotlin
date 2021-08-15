@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,9 +18,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.emreduver.messageapplication.R
+import com.emreduver.messageapplication.databinding.SettingsFragmentBinding
 import com.emreduver.messageapplication.utilities.HelperService
 import com.emreduver.messageapplication.viewmodels.main.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,27 +32,46 @@ import java.io.ByteArrayOutputStream
 
 class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
-    private val SELECT_IMAGE_CODE = 1000;
-    private val PERMISSION_CODE = 1001;
+    private lateinit var dataBinding: SettingsFragmentBinding
+    private val SELECT_IMAGE_CODE = 1000
+    private val PERMISSION_CODE = 1001
+    private var firstname = ""
+    private var lastname = ""
+    private var statusMessage = ""
+    private var birthday:Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.settings_fragment, container, false)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.settings_fragment, container, false)
+
+        return dataBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
+        getUser()
+        cardViewChangeUsername.setOnClickListener {
+            val action = SettingsFragmentDirections.actionSettingsFragmentToChangeUsernameFragment()
+            findNavController().navigate(action)
+        }
+        cardViewChangeEmail.setOnClickListener {
+            val action = SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment()
+            findNavController().navigate(action)
+        }
+        cardViewUpdateProfile.setOnClickListener {
+            val action = SettingsFragmentDirections.actionSettingsFragmentToUpdateProfileFragment(firstname,lastname,statusMessage,birthday)
+            findNavController().navigate(action)
+        }
         imageSettings.setOnClickListener {
             if (checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED
             ) {
-                //permission denied
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
             } else {
@@ -56,6 +79,24 @@ class SettingsFragment : Fragment() {
             }
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getUser(){
+        viewModel.getUser().observe(viewLifecycleOwner) { user ->
+
+            user.let {
+                dataBinding.currentUser = it
+                firstname = it.Firstname
+                lastname = it.Lastname
+                birthday = it.BirthDay.time
+                statusMessage = it.StatusMessage
+
+                val calendar = Calendar.getInstance()
+                calendar.setTimeInMillis(it.BirthDay.time)
+                Log.i("OkHttp","Date: ${calendar.time}")
+                HelperService.loadImageFromPicasso(it.PhotoPath, imageSettings)
+            }
+        }
     }
 
     private fun pickImageFromGallery() {
@@ -100,6 +141,12 @@ class SettingsFragment : Fragment() {
                 var a = bitMapToString(imageBitmap)
             }
         }
+    }
+
+    private fun errorListener() {
+        viewModel.errorState.observe(viewLifecycleOwner, {
+            HelperService.showMessageByToast(it)
+        })
     }
 
     private fun bitMapToString(bitmap: Bitmap): String {

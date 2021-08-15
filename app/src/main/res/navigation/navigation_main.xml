@@ -22,5 +22,53 @@
         <action
             android:id="@+id/action_settingsFragment_to_mainScreenFragment"
             app:destination="@id/mainScreenFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changeUsernameFragment"
+            app:destination="@id/changeUsernameFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changeEmailFragment"
+            app:destination="@id/changeEmailFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.emreduver.messageapplication.ui.main.ChangeUsernameFragment"
+        android:label="change_username_fragment"
+        tools:layout="@layout/change_username_fragment" >
+        <action
+            android:id="@+id/action_changeUsernameFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeEmailFragment"
+        android:name="com.emreduver.messageapplication.ui.main.ChangeEmailFragment"
+        android:label="change_email_fragment"
+        tools:layout="@layout/change_email_fragment" />
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.emreduver.messageapplication.ui.main.UpdateProfileFragment"
+        android:label="update_profile_fragment"
+        tools:layout="@layout/update_profile_fragment" >
+        <action
+            android:id="@+id/action_updateProfileFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_updateProfileFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment" />
+        <argument
+            android:name="firstname"
+            app:argType="string" />
+        <argument
+            android:name="lastname"
+            app:argType="string" />
+        <argument
+            android:name="statusMessage"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="birthdayTimestamp"
+            app:argType="long" />
     </fragment>
 </navigation>

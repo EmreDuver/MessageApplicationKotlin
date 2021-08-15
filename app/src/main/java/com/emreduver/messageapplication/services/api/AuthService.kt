@@ -3,6 +3,7 @@ package com.emreduver.messageapplication.services.api
 import android.util.Log
 import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
+import com.emreduver.messageapplication.entities.receive.token.Token
 import com.emreduver.messageapplication.entities.send.auth.Login
 import com.emreduver.messageapplication.entities.send.auth.LoginByRefreshToken
 import com.emreduver.messageapplication.entities.send.auth.Register
@@ -32,7 +33,7 @@ class AuthService {
             }
         }
 
-        suspend fun login (login: Login) : ApiResult<Unit>{
+        suspend fun login (login: Login) : ApiResult<Token>{
             try {
                 val result = retrofitAuthServiceWithoutInterceptor.login(login)
 
@@ -42,15 +43,16 @@ class AuthService {
                 val token =  result.body()!!.Data!!
                 HelperService.saveToSharedPreferences(token)
 
-                return result.body() as ApiResult<Unit>
+                return result.body() as ApiResult<Token>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
             }
         }
 
-        suspend fun loginByRefreshToken (loginByRefreshToken: LoginByRefreshToken) : ApiResult<Unit>{
+        suspend fun loginByRefreshToken () : ApiResult<Token>{
             try {
+                val loginByRefreshToken = LoginByRefreshToken(HelperService.getTokenSharedPreference()!!.UserId,HelperService.getTokenSharedPreference()!!.RefreshToken)
                 val result = retrofitAuthServiceWithoutInterceptor.loginByRefreshToken(loginByRefreshToken)
 
                 if (!result.isSuccessful)
@@ -59,26 +61,34 @@ class AuthService {
                 val token =  result.body()!!.Data!!
                 HelperService.saveToSharedPreferences(token)
 
-                return result.body() as ApiResult<Unit>
+                return result.body() as ApiResult<Token>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
             }
         }
 
-        suspend fun logout (refreshToken: String) : ApiResult<Unit>{
+        suspend fun logout() : ApiResult<Unit>{
             try {
+                val refreshToken = HelperService.getTokenSharedPreference()?.RefreshToken
+                if (refreshToken.isNullOrEmpty()){
+                    HelperService.deleteTokenSharedPreference()
+                    return ApiResult(true)
+                }
                 val result = retrofitAuthServiceWithoutInterceptor.logout(refreshToken)
 
-                if (!result.isSuccessful)
-                    return HelperService.handleApiError(result)
+                if (!result.isSuccessful){
+                    HelperService.deleteTokenSharedPreference()
+                    return ApiResult(true)
+                }
 
                 HelperService.deleteTokenSharedPreference()
 
                 return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
-                return HelperService.handleException(e)
+                HelperService.deleteTokenSharedPreference()
+                return ApiResult(true)
             }
         }
 
@@ -90,8 +100,7 @@ class AuthService {
                     if (HelperService.getTokenSharedPreference()==null){
                         return HelperService.handleApiError(result)
                     }
-                    val loginByRefreshToken = LoginByRefreshToken(HelperService.getTokenSharedPreference()!!.UserId,HelperService.getTokenSharedPreference()!!.RefreshToken)
-                    loginByRefreshToken(loginByRefreshToken)
+                    loginByRefreshToken()
                 }
 
                 return result.body() as ApiResult<Unit>
