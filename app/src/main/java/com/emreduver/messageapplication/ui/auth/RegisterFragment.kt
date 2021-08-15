@@ -1,11 +1,7 @@
 package com.emreduver.messageapplication.ui.auth
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +9,9 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.emreduver.messageapplication.R
 import com.emreduver.messageapplication.entities.send.auth.Register
-import com.emreduver.messageapplication.utilities.GlobalApp
 import com.emreduver.messageapplication.utilities.HelperService
-import com.emreduver.messageapplication.viewmodels.auth.AuthViewModel
 import com.emreduver.messageapplication.viewmodels.auth.RegisterViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment : Fragment() {
@@ -79,7 +72,7 @@ class RegisterFragment : Fragment() {
 
     private fun errorListener() {
         viewModel.errorState.observe(viewLifecycleOwner, {
-            HelperService.showErrorMessageByToast(it)
+            HelperService.showMessageByToast(it)
         })
     }
 }

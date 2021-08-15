@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.emreduver.messageapplication.R
 import com.emreduver.messageapplication.ui.auth.AuthActivity
-import com.emreduver.messageapplication.ui.user.UserActivity
+import com.emreduver.messageapplication.ui.main.UserActivity
 import com.emreduver.messageapplication.viewmodels.launch.LaunchActivityViewModel
 
 class LaunchActivity : AppCompatActivity() {

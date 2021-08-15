@@ -25,7 +25,7 @@ class AuthService {
 
                 Log.i("OkHTTP","Kullanıcı başarıyla kayıt olmuştur.")
 
-                return ApiResult(true)
+                return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
@@ -42,7 +42,7 @@ class AuthService {
                 val token =  result.body()!!.Data!!
                 HelperService.saveToSharedPreferences(token)
 
-                return ApiResult(true)
+                return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
@@ -59,7 +59,7 @@ class AuthService {
                 val token =  result.body()!!.Data!!
                 HelperService.saveToSharedPreferences(token)
 
-                return ApiResult(true)
+                return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
@@ -75,7 +75,7 @@ class AuthService {
 
                 HelperService.deleteTokenSharedPreference()
 
-                return ApiResult(true)
+                return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)
@@ -94,7 +94,7 @@ class AuthService {
                     loginByRefreshToken(loginByRefreshToken)
                 }
 
-                return ApiResult(true)
+                return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)

@@ -1,4 +1,4 @@
-package com.emreduver.messageapplication.ui.user
+package com.emreduver.messageapplication.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

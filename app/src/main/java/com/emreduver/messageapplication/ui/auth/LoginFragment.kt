@@ -10,11 +10,10 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.emreduver.messageapplication.R
 import com.emreduver.messageapplication.entities.send.auth.Login
-import com.emreduver.messageapplication.ui.user.UserActivity
+import com.emreduver.messageapplication.ui.main.UserActivity
 import com.emreduver.messageapplication.utilities.HelperService
 import com.emreduver.messageapplication.viewmodels.auth.LoginViewModel
 import kotlinx.android.synthetic.main.login_fragment.*
-import kotlinx.android.synthetic.main.register_fragment.*
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
@@ -68,7 +67,7 @@ class LoginFragment : Fragment() {
 
     private fun errorListener() {
         viewModel.errorState.observe(viewLifecycleOwner, {
-            HelperService.showErrorMessageByToast(it)
+            HelperService.showMessageByToast(it)
         })
     }
 }

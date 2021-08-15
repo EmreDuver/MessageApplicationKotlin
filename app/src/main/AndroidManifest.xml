@@ -3,6 +3,7 @@
     package="com.emreduver.messageapplication">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".utilities.GlobalApp"
@@ -13,7 +14,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MessageApplication">
-        <activity android:name=".ui.user.UserActivity"></activity>
+        <activity android:name=".ui.main.UserActivity" />
         <activity android:name=".ui.auth.AuthActivity" />
         <activity
             android:name=".ui.launch.LaunchActivity">

@@ -73,11 +73,11 @@ class HelperService {
             }
         }
 
-        fun showErrorMessageByToast(errorMessage:String) {
+        fun showMessageByToast(message:String) {
 
-            if (errorMessage.isNullOrEmpty()) return
+            if (message.isNullOrEmpty()) return
 
-            Toast.makeText(GlobalApp.getAppContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            Toast.makeText(GlobalApp.getAppContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 }
