@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainScreenFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainScreenFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -31,6 +34,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_updateProfileFragment"
             app:destination="@id/updateProfileFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeUsernameFragment"
@@ -70,5 +76,23 @@
         <argument
             android:name="birthdayTimestamp"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.emreduver.messageapplication.ui.main.ChangePasswordFragment"
+        android:label="change_password_fragment"
+        tools:layout="@layout/change_password_fragment" >
+        <action
+            android:id="@+id/action_changePasswordFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.emreduver.messageapplication.ui.main.MessageFragment"
+        android:label="message_fragment"
+        tools:layout="@layout/message_fragment" >
+        <action
+            android:id="@+id/action_messageFragment_to_mainScreenFragment"
+            app:destination="@id/mainScreenFragment" />
     </fragment>
 </navigation>

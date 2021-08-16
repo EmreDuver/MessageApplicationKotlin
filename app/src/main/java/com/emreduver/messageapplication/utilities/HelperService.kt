@@ -1,6 +1,8 @@
 package com.emreduver.messageapplication.utilities
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -9,6 +11,9 @@ import com.emreduver.messageapplication.constants.Messages
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.token.Token
 import com.google.gson.Gson
+import com.microsoft.signalr.HubConnection
+import com.microsoft.signalr.HubConnectionBuilder
+import com.microsoft.signalr.HubConnectionState
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import retrofit2.Response
@@ -17,6 +22,8 @@ import retrofit2.Response
 class HelperService {
 
     companion object {
+        lateinit var hubConnectionInstance: HubConnection
+        var control: Boolean = false
 
         fun saveToSharedPreferences(token: Token) {
 
@@ -87,6 +94,60 @@ class HelperService {
             val baseImageUrl = "${Api.baseImageURL}/userImages/${url}"
             Picasso.get().load(baseImageUrl).into(imageView);
             Log.i("Message", baseImageUrl)
+        }
+
+        fun connectHub(){
+            val userAccessToken = getTokenSharedPreference()!!.AccessToken
+
+            if(!control){
+                hubConnectionInstance = HubConnectionBuilder.create(Api.baseHubUrl).withHeader("user_access_token", userAccessToken).build()
+            }
+
+            if (hubConnectionInstance.connectionState == HubConnectionState.DISCONNECTED){
+                tryToConnectHub(hubConnectionInstance)
+            }
+        }
+
+        private fun tryToConnectHub(hubConnection: HubConnection)
+        {
+            var runnable: Runnable = Runnable { }
+            var handler = Handler(Looper.myLooper()!!)
+            runnable = Runnable {
+                if (hubConnection.connectionState == HubConnectionState.DISCONNECTED) {
+                    connectWithHandler(hubConnection)
+                    handler.removeCallbacks(runnable)
+                }
+                handler.postDelayed(runnable, 3000)
+            }
+            handler.post(runnable)
+        }
+
+        private fun connectWithHandler(hubConnection: HubConnection) {
+            try {
+                var condition = false
+                var counter = 0
+                var runnable: Runnable = Runnable { }
+                var handler = Handler(Looper.myLooper()!!)
+                runnable = object : Runnable {
+                    override fun run() {
+                        hubConnection.start()
+                        counter++
+                        if (hubConnection.connectionState == HubConnectionState.CONNECTED) {
+                            hubConnection.send("OnConnectedAsync")
+                            Log.i("OkHttp", "$counter. adımda bağlantı sağlandı")
+                            condition = true
+                        }
+                        if (condition) {
+                            handler.removeCallbacks(runnable)
+                            return
+                        }
+                        handler.postDelayed(runnable, 1000)
+                    }
+                }
+                handler.post(runnable)
+            } catch (e: Exception) {
+                Log.i("OkHttp", "Burada Çökecekti $e")
+            }
         }
     }
 }

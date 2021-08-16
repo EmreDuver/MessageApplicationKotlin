@@ -3,10 +3,7 @@ package com.emreduver.messageapplication.services.api
 import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.user.UserDto
-import com.emreduver.messageapplication.entities.send.user.AddProfilePhotoDto
-import com.emreduver.messageapplication.entities.send.user.ChangeUsernameDto
-import com.emreduver.messageapplication.entities.send.user.EmailChangeDto
-import com.emreduver.messageapplication.entities.send.user.UpdateProfileDto
+import com.emreduver.messageapplication.entities.send.user.*
 import com.emreduver.messageapplication.services.retrofit.ApiClient
 import com.emreduver.messageapplication.services.retrofit.RetrofitUserService
 import com.emreduver.messageapplication.utilities.HelperService
@@ -103,6 +100,20 @@ class UserService {
         suspend fun changeUsername (changeUsernameDto: ChangeUsernameDto) : ApiResult<Unit>{
             try {
                 val result = retrofitUserServiceWithInterceptor.changeUsername(changeUsernameDto)
+
+                if (!result.isSuccessful)
+                    return HelperService.handleApiError(result)
+
+                return result.body() as ApiResult<Unit>
+            }
+            catch (e:Exception){
+                return HelperService.handleException(e)
+            }
+        }
+
+        suspend fun changePassword (changePasswordDto: ChangePasswordDto) : ApiResult<Unit>{
+            try {
+                val result = retrofitUserServiceWithInterceptor.changePassword(changePasswordDto)
 
                 if (!result.isSuccessful)
                     return HelperService.handleApiError(result)

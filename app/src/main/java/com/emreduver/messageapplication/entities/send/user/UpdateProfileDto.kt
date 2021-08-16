@@ -7,5 +7,5 @@ data class UpdateProfileDto(
     var FirstName:String,
     var LastName:String,
     var StatusMessage:String,
-    var BirthDay: Date
+    var BirthDay: String
 )

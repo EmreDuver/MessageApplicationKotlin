@@ -13,7 +13,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editFirstnameProfileEdit"
+                android:id="@+id/editFirstnameUpdateProfile"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editLastNameProfileEdit"
+                android:id="@+id/editLastnameUpdateProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -48,7 +48,7 @@
                 android:hint="Soyad"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editFirstnameProfileEdit"
+                app:layout_constraintTop_toBottomOf="@id/editFirstnameUpdateProfile"
                 app:layout_constraintWidth_percent="0.7"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -61,7 +61,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBiographyProfileEdit"
+                android:id="@+id/editStatusMessageUpdateProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -69,10 +69,10 @@
                 app:boxStrokeColor="@color/blue"
                 app:hintTextColor="@color/blue"
                 android:inputType="text"
-                android:hint="Biyografi"
+                android:hint="Durum Mesajı"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editLastNameProfileEdit"
+                app:layout_constraintTop_toBottomOf="@id/editLastnameUpdateProfile"
                 app:layout_constraintWidth_percent="0.7"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -85,7 +85,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBirthDay"
+                android:id="@+id/editBirthdayUpdateProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -99,7 +99,7 @@
                 app:layout_constraintWidth_percent="0.7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBiographyProfileEdit"
+                app:layout_constraintTop_toBottomOf="@+id/editStatusMessageUpdateProfile"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -124,7 +124,7 @@
                 app:layout_constraintWidth_percent="0.4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBirthDay"/>
+                app:layout_constraintTop_toBottomOf="@+id/editBirthdayUpdateProfile"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

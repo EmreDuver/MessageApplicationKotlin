@@ -4,10 +4,7 @@ import com.emreduver.messageapplication.constants.RetrofitUrl
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.user.UserDto
 import com.emreduver.messageapplication.entities.send.auth.Register
-import com.emreduver.messageapplication.entities.send.user.AddProfilePhotoDto
-import com.emreduver.messageapplication.entities.send.user.ChangeUsernameDto
-import com.emreduver.messageapplication.entities.send.user.EmailChangeDto
-import com.emreduver.messageapplication.entities.send.user.UpdateProfileDto
+import com.emreduver.messageapplication.entities.send.user.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -35,5 +32,8 @@ interface RetrofitUserService {
 
     @POST(RetrofitUrl.ChangeUsername)
     suspend fun changeUsername(@Body changeUsernameDto: ChangeUsernameDto) : Response<ApiResult<Unit>>
+
+    @POST(RetrofitUrl.ChangePassword)
+    suspend fun changePassword(@Body changePasswordDto: ChangePasswordDto) : Response<ApiResult<Unit>>
 
 }
