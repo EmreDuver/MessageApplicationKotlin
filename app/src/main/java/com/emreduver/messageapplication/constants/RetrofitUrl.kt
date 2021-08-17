@@ -14,5 +14,6 @@ object RetrofitUrl {
     const val ChangeUsername = "/api/User/changeusername"
     const val ChangePassword = "/api/User/changepassword"
     const val AddUserImage = "/api/User/adduserimage"
-    const val DeleteUserImage = "/api/user/deleteuserimage"
+    const val DeleteUserImage = "/api/User/deleteuserimage"
+    const val UserSearch = "/api/User/usersearch"
 }

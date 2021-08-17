@@ -3,4 +3,6 @@
     <string name="forgetPassword">Şifremi Unuttum</string>
     <string name="textViewNotHaveAnAccount">Hesabınız mı yok?</string>
     <string name="textViewCreateAccount">Hemen oluşturun.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

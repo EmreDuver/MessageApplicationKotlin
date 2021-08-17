@@ -3,6 +3,7 @@ package com.emreduver.messageapplication.services.api
 import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.user.UserDto
+import com.emreduver.messageapplication.entities.receive.user.UserSearchDto
 import com.emreduver.messageapplication.entities.send.user.*
 import com.emreduver.messageapplication.services.retrofit.ApiClient
 import com.emreduver.messageapplication.services.retrofit.RetrofitUserService
@@ -21,6 +22,20 @@ class UserService {
                     return HelperService.handleApiError(result)
 
                 return result.body() as ApiResult<UserDto>
+            }
+            catch (e:Exception){
+                return HelperService.handleException(e)
+            }
+        }
+
+        suspend fun userSearch (username:String) : ApiResult<ArrayList<UserSearchDto>> {
+            try {
+                val result = retrofitUserServiceWithInterceptor.userSearch(username)
+
+                if (!result.isSuccessful)
+                    return HelperService.handleApiError(result)
+
+                return result.body() as ApiResult<ArrayList<UserSearchDto>>
             }
             catch (e:Exception){
                 return HelperService.handleException(e)

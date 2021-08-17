@@ -3,6 +3,7 @@ package com.emreduver.messageapplication.services.retrofit
 import com.emreduver.messageapplication.constants.RetrofitUrl
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.user.UserDto
+import com.emreduver.messageapplication.entities.receive.user.UserSearchDto
 import com.emreduver.messageapplication.entities.send.auth.Register
 import com.emreduver.messageapplication.entities.send.user.*
 import retrofit2.Response
@@ -35,5 +36,8 @@ interface RetrofitUserService {
 
     @POST(RetrofitUrl.ChangePassword)
     suspend fun changePassword(@Body changePasswordDto: ChangePasswordDto) : Response<ApiResult<Unit>>
+
+    @POST(RetrofitUrl.UserSearch)
+    suspend fun userSearch(@Body username: String) : Response<ApiResult<ArrayList<UserSearchDto>>>
 
 }

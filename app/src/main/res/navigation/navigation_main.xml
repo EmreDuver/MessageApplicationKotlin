@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainScreenFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
+        <action
+            android:id="@+id/action_mainScreenFragment_to_userSearchFragment"
+            app:destination="@id/userSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -94,5 +97,32 @@
         <action
             android:id="@+id/action_messageFragment_to_mainScreenFragment"
             app:destination="@id/mainScreenFragment" />
+        <action
+            android:id="@+id/action_messageFragment_to_userSearchFragment"
+            app:destination="@id/userSearchFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="firstname"
+            app:argType="string" />
+        <argument
+            android:name="lastname"
+            app:argType="string" />
+        <argument
+            android:name="photoPath"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/userSearchFragment"
+        android:name="com.emreduver.messageapplication.ui.main.UserSearchFragment"
+        android:label="user_search_fragment"
+        tools:layout="@layout/user_search_fragment" >
+        <action
+            android:id="@+id/action_userSearchFragment_to_mainScreenFragment"
+            app:destination="@id/mainScreenFragment" />
+        <action
+            android:id="@+id/action_userSearchFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
 </navigation>

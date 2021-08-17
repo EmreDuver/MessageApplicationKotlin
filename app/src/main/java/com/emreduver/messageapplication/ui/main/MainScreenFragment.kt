@@ -45,14 +45,15 @@ class MainScreenFragment : Fragment() {
         }
 
         cardViewMainScreen.setOnClickListener {
-            val action = MainScreenFragmentDirections.actionMainScreenFragmentToMessageFragment()
+            val action = MainScreenFragmentDirections.actionMainScreenFragmentToMessageFragment("userId","firstname","lastname","photopath")
             findNavController().navigate(action)
         }
 
         topAppBar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.searchMainScreen -> {
-                    HelperService.showMessageByToast("Search")
+                    val action = MainScreenFragmentDirections.actionMainScreenFragmentToUserSearchFragment()
+                    findNavController().navigate(action)
                     true
                 }
                 R.id.logoutMainScreen -> {
