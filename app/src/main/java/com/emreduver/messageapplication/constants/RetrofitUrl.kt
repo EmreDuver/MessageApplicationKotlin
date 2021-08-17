@@ -16,4 +16,8 @@ object RetrofitUrl {
     const val AddUserImage = "/api/User/adduserimage"
     const val DeleteUserImage = "/api/User/deleteuserimage"
     const val UserSearch = "/api/User/usersearch"
+
+    const val SendMessage = "/api/Message/sendmessage"
+    const val UpdateMessageStatus = "/api/Message/updatemessagestatus"
+    const val GetMessage = "/api/Message/getmessage"
 }

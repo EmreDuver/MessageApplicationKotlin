@@ -14,23 +14,20 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.emreduver.messageapplication.R
 import com.emreduver.messageapplication.databinding.SettingsFragmentBinding
 import com.emreduver.messageapplication.entities.send.user.AddProfilePhotoDto
-import com.emreduver.messageapplication.ui.auth.LoginFragmentDirections
-import com.emreduver.messageapplication.ui.auth.RegisterFragmentDirections
 import com.emreduver.messageapplication.utilities.HelperService
 import com.emreduver.messageapplication.viewmodels.main.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.settings_fragment.*
 import java.io.ByteArrayOutputStream
+
 
 class SettingsFragment : Fragment() {
     private lateinit var viewModel: SettingsViewModel
@@ -176,12 +173,7 @@ class SettingsFragment : Fragment() {
 
             imageUri?.let{
                 val imageBitmap = if (Build.VERSION.SDK_INT >= 28) {
-                    ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                            requireContext().contentResolver,
-                            it
-                        )
-                    )
+                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver,it))
                 } else {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
                 }
@@ -208,12 +200,13 @@ class SettingsFragment : Fragment() {
     private fun deleteProfileImage(userId: String){
         viewModel.deleteProfilePicture(userId).observe(viewLifecycleOwner) {
             when(it){
-                true ->{
+                true -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Resim silme başarılı.")
                         .setMessage("Ana ekrana yönlendiriliyorsunuz.")
                         .setPositiveButton("Tamam") { dialog, which ->
-                            val action = SettingsFragmentDirections.actionSettingsFragmentToMainScreenFragment()
+                            val action =
+                                SettingsFragmentDirections.actionSettingsFragmentToMainScreenFragment()
                             findNavController().navigate(action)
                         }.show()
                 }
@@ -232,7 +225,7 @@ class SettingsFragment : Fragment() {
         val BAOS = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, BAOS)
         val b = BAOS.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
+        return Base64.encodeToString(b, Base64.NO_WRAP)
     }
 
 }

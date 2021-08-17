@@ -31,6 +31,7 @@ class UpdateProfileFragment : Fragment() {
     private var lastname = ""
     private var statusMessage = ""
     private var updatedBirthday = ""
+    private lateinit var updatedBirthdayDate:Date
     private var birthdayTimestamp:Long = 0
 
     override fun onCreateView(
@@ -57,6 +58,7 @@ class UpdateProfileFragment : Fragment() {
         calendar.timeInMillis = birthdayTimestamp
         var birthday = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH)+1}/${calendar.get(Calendar.YEAR)}"
         updatedBirthday = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
+        updatedBirthdayDate = calendar.time
 
         editFirstnameUpdateProfile.editText!!.setText(firstname)
         editLastnameUpdateProfile.editText!!.setText(lastname)
@@ -73,7 +75,7 @@ class UpdateProfileFragment : Fragment() {
 
                 birthday = "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH)+1}/${calendar.get(Calendar.YEAR)}"
                 editBirthdayUpdateProfile.editText!!.setText(birthday)
-                updatedBirthday = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
+                updatedBirthdayDate = calendar.time
             }
         }
 
@@ -87,7 +89,7 @@ class UpdateProfileFragment : Fragment() {
         val updatedFirstname = editFirstnameUpdateProfile.editText?.text.toString()
         val updatedLastname = editLastnameUpdateProfile.editText?.text.toString()
         val updatedStatusMessage = editStatusMessageUpdateProfile.editText?.text.toString()
-        val profile = UpdateProfileDto(HelperService.getTokenSharedPreference()!!.UserId,updatedFirstname,updatedLastname,updatedStatusMessage,updatedBirthday)
+        val profile = UpdateProfileDto(HelperService.getTokenSharedPreference()!!.UserId,updatedFirstname,updatedLastname,updatedStatusMessage,updatedBirthdayDate)
 
         viewModel.updateProfile(profile).observe(viewLifecycleOwner){
             if (it){
