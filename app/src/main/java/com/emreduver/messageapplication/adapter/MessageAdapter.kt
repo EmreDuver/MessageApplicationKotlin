@@ -28,13 +28,13 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
     override fun onBindViewHolder(holder: MessageViewModel, position: Int) {
         holder.view.message = messageList[position]
 
-        holder.view.textMessageIncoming.visibility = View.GONE
-        holder.view.textMessageSent.visibility = View.GONE
+        holder.view.cardViewMessageIncoming.visibility = View.GONE
+        holder.view.cardViewMessageSent.visibility = View.GONE
 
         if(messageList[position].SenderUserId == HelperService.getTokenSharedPreference()!!.UserId){
-            holder.view.textMessageSent.visibility = View.VISIBLE
+            holder.view.cardViewMessageSent.visibility = View.VISIBLE
         }else{
-            holder.view.textMessageIncoming.visibility = View.VISIBLE
+            holder.view.cardViewMessageIncoming.visibility = View.VISIBLE
             if(messageList[position].status == 0){
 
                 Handler().post(Runnable {
@@ -53,7 +53,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
 
         holder.view.MessageSentDate.visibility = View.GONE
 
-        holder.view.textMessageSent.setOnClickListener{
+        holder.view.cardViewMessageSent.setOnClickListener{
             if(holder.view.MessageSentDate.text.isNullOrEmpty()){
                 holder.view.MessageSentDate.text = sendDate(messageList[position].SendDateUnix)
                 holder.view.MessageSentDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_check_24,0,0,0)
@@ -64,7 +64,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             }
         }
 
-        holder.view.textMessageIncoming.setOnClickListener{
+        holder.view.cardViewMessageIncoming.setOnClickListener{
             if(holder.view.MessageReceiveDate.text.isNullOrEmpty()){
                 holder.view.MessageReceiveDate.text = sendDate(messageList[position].SendDateUnix)
                 holder.view.MessageReceiveDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_check_24,0,0,0)
@@ -77,7 +77,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             }
         }
 
-        holder.view.textMessageIncoming.setOnLongClickListener {
+        holder.view.cardViewMessageIncoming.setOnLongClickListener {
             if(holder.view.MessageReadDate.text.isNullOrEmpty()){
                 holder.view.MessageReadDate.text = sendDate(messageList[position].ReadDateUnix)
                 holder.view.MessageReadDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_done_all_24,0,0,0)

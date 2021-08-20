@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/textMessageIncoming"
+            android:id="@+id/cardViewMessageIncoming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -61,11 +61,17 @@
                     android:visibility="gone" />
 
             </LinearLayout>
+            <ImageView
+                android:id="@+id/MessageReceiveImage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:src="@drawable/logo"
+                android:visibility="gone"/>
 
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/textMessageSent"
+            android:id="@+id/cardViewMessageSent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -104,6 +110,13 @@
                     android:visibility="gone" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/MessageSentImage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:src="@drawable/logo"
+                android:visibility="gone"/>
 
         </com.google.android.material.card.MaterialCardView>
 
