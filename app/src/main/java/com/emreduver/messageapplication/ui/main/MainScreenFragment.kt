@@ -2,29 +2,25 @@ package com.emreduver.messageapplication.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.emreduver.messageapplication.R
-import com.emreduver.messageapplication.constants.Api
+import com.emreduver.messageapplication.adapter.MessageAdapter
+import com.emreduver.messageapplication.adapter.MessageHistoryAdapter
 import com.emreduver.messageapplication.ui.launch.LaunchActivity
 import com.emreduver.messageapplication.utilities.HelperService
 import com.emreduver.messageapplication.viewmodels.main.MainScreenViewModel
-import com.microsoft.signalr.HubConnection
-import com.microsoft.signalr.HubConnectionBuilder
-import com.microsoft.signalr.HubConnectionState
 import kotlinx.android.synthetic.main.main_screen_fragment.*
-import java.util.*
+import kotlinx.android.synthetic.main.message_fragment.*
 
 class MainScreenFragment : Fragment() {
-
     private lateinit var viewModel: MainScreenViewModel
+    private lateinit var messageHistoryAdapter: MessageHistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,19 +31,16 @@ class MainScreenFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainScreenViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        cardViewMainScreen.setOnLongClickListener {
-            cardViewMainScreen.isChecked = !cardViewMainScreen.isChecked
-            true
-        }
+        viewModel = ViewModelProvider(this).get(MainScreenViewModel::class.java)
+        messageHistoryAdapter = MessageHistoryAdapter(arrayListOf())
 
-        cardViewMainScreen.setOnClickListener {
-            val action = MainScreenFragmentDirections.actionMainScreenFragmentToMessageFragment("userId","firstname","lastname","photopath")
-            findNavController().navigate(action)
-        }
+        recyclerViewMainFragment.layoutManager = LinearLayoutManager(context)
+        recyclerViewMainFragment.adapter = messageHistoryAdapter
+
+        getMessageHistory(HelperService.getTokenSharedPreference()!!.UserId)
 
         topAppBar.setOnMenuItemClickListener {
             when(it.itemId){
@@ -72,7 +65,34 @@ class MainScreenFragment : Fragment() {
                 else -> super.onOptionsItemSelected(it)
             }
         }
-
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getMessageHistory(userId:String){
+        viewModel.getMessageHistory(userId).observe(viewLifecycleOwner){
+            when(it){
+                true -> {
+                    getMessages()
+                }
+                false -> {
+                    errorListener()
+                }
+            }
+        }
+    }
+
+    private fun getMessages() {
+        viewModel.messageHistory.observe(viewLifecycleOwner){
+            if (it != null){
+                messageHistoryAdapter.messageHistory = it
+                messageHistoryAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun errorListener() {
+        viewModel.errorState.observe(viewLifecycleOwner, {
+            HelperService.showMessageByToast(it)
+        })
     }
 }

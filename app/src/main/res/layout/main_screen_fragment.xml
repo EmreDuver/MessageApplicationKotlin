@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,77 +23,15 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginTop="?attr/actionBarSize">
 
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewMainScreen"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMainFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:checkable="true"
-            android:focusable="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/imageProfile"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="2"
-                    android:src="@drawable/logo"
-                    app:civ_border_width="2dp"
-                    app:civ_shadow="true"
-                    app:civ_shadow_radius="3dp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="7"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Emre Düver"
-                        android:textColor="@color/black"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam eget dui nec interdum. Quisque feugiat suscipit tellus eget fringilla. Duis non suscipit purus. Quisque rhoncus scelerisque dui, eget rutrum nisi auctor et. Maecenas volutpat faucibus blandit. Nulla hendrerit ante sit amet maximus vehicula. Nunc sit amet gravida ex, sit amet dignissim tortor. Phasellus vulputate suscipit rutrum. Vestibulum ante eros, vestibulum ut fringilla ut, scelerisque at orci. Proin blandit iaculis sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum non semper justo. Vivamus euismod porta mattis."
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:text="Dün"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
+            android:layout_height="match_parent" />
 
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

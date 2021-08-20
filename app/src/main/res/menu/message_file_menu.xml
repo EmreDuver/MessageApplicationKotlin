@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sendImage"
+        android:icon="@drawable/ic_baseline_image_24"
+        android:iconTint="@color/black"
+        android:title="Resim"/>
+    <item
+        android:id="@+id/sendVideo"
+        android:icon="@drawable/ic_baseline_video_library_24"
+        android:iconTint="@color/black"
+        android:title="Video"/>
+    <item
+        android:id="@+id/sendFile"
+        android:icon="@drawable/ic_baseline_insert_drive_file_24"
+        android:iconTint="@color/black"
+        android:title="Dosya"/>
+    <item
+        android:id="@+id/sendAudio"
+        android:icon="@drawable/ic_baseline_audiotrack_24"
+        android:iconTint="@color/black"
+        android:title="Ses"/>
+    <item
+        android:id="@+id/sendLocation"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:iconTint="@color/black"
+        android:title="Konum"/>
+</menu>

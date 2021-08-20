@@ -20,4 +20,5 @@ object RetrofitUrl {
     const val SendMessage = "/api/Message/sendmessage"
     const val UpdateMessageStatus = "/api/Message/updatemessagestatus"
     const val GetMessage = "/api/Message/getmessage"
+    const val GetMessageHistory = "/api/Message/getmessagehistory"
 }

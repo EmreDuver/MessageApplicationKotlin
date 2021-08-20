@@ -2,6 +2,7 @@ package com.emreduver.messageapplication.services.retrofit
 
 import com.emreduver.messageapplication.constants.RetrofitUrl
 import com.emreduver.messageapplication.entities.receive.message.Message
+import com.emreduver.messageapplication.entities.receive.message.MessageHistoryDto
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.send.message.GetMessageDto
 import com.emreduver.messageapplication.entities.send.message.SendMessageDto
@@ -18,5 +19,8 @@ interface RetrofitMessageService {
 
     @POST(RetrofitUrl.UpdateMessageStatus)
     suspend fun updateMessageStatus(@Body messageId: String) : Response<ApiResult<Unit>>
+
+    @POST(RetrofitUrl.GetMessageHistory)
+    suspend fun getMessageHistory(@Body userId: String) : Response<ApiResult<ArrayList<MessageHistoryDto>>>
 
 }

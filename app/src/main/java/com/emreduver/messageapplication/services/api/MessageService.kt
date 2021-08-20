@@ -2,6 +2,7 @@ package com.emreduver.messageapplication.services.api
 
 import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.entities.receive.message.Message
+import com.emreduver.messageapplication.entities.receive.message.MessageHistoryDto
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.send.message.GetMessageDto
 import com.emreduver.messageapplication.entities.send.message.SendMessageDto
@@ -55,5 +56,17 @@ class MessageService {
             }
         }
 
+        suspend fun getMessageHistory(userId:String) : ApiResult<ArrayList<MessageHistoryDto>>{
+            try {
+                val result = retrofitMessageServiceWithInterceptor.getMessageHistory(userId)
+                if (!result.isSuccessful)
+                    return HelperService.handleApiError(result)
+
+                return result.body() as ApiResult<ArrayList<MessageHistoryDto>>
+            }
+            catch (e:Exception){
+                return HelperService.handleException(e)
+            }
+        }
     }
 }
