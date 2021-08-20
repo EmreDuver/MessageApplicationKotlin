@@ -1,6 +1,7 @@
 package com.emreduver.messageapplication.ui.main
 
 import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.emreduver.messageapplication.entities.send.message.GetMessageDto
 import com.emreduver.messageapplication.entities.send.message.SendMessageDto
 import com.emreduver.messageapplication.utilities.HelperService
 import com.emreduver.messageapplication.viewmodels.main.MessageViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.android.synthetic.main.message_fragment.*
 
 
@@ -25,6 +27,21 @@ class MessageFragment : Fragment() {
     private lateinit var senderUserId: String
     private lateinit var receiverUserId: String
     private lateinit var messageAdapter: MessageAdapter
+
+    private val SELECT_IMAGE_CODE = 1000
+    private val SELECT_VIDEO_CODE = 1001
+    private val SELECT_FILE_CODE = 1002
+    private val SELECT_AUDIO_CODE = 1003
+    private val IMAGE_PERMISSION_CODE = 1100
+    private val VIDEO_PERMISSION_CODE = 1101
+    private val FILE_PERMISSION_CODE = 1102
+    private val AUDIO_PERMISSION_CODE = 1103
+    private val LOCATION_PERMISSION_CODE = 1104
+
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var locationManager: LocationManager
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -78,4 +78,7 @@ dependencies {
 
     //SignalR
     implementation 'com.microsoft.signalr:signalr:1.0.0'
+
+    //Location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }
