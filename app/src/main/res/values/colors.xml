@@ -11,4 +11,6 @@
     <color name="light_gray">#EDEDED</color>
     <color name="blue"> #1AA2D4</color>
     <color name="blue_variant"> #1A87D4</color>
+    <color name="message_sent_green"> #4AC959</color>
+    <color name="message_receive_gray">#E0E2E4</color>
 </resources>

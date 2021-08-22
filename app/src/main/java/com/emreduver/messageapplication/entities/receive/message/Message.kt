@@ -13,5 +13,8 @@ data class Message(
     @SerializedName("readDateUnix") var ReadDateUnix: Long,
     @SerializedName("file") var IsFile: Boolean,
     @SerializedName("fileType") var FileType: Int,
-    @SerializedName("filePath") var FilePath: String? = null
+    @SerializedName("filePath") var FilePath: String? = null,
+    @SerializedName("fileName") var FileName: String? = null,
+    @SerializedName("longitude") var Longitude: Double? = null,
+    @SerializedName("latitude") var Latitude: Double? = null
 )

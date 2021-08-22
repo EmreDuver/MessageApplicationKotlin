@@ -7,5 +7,8 @@ data class SendMessageDto(
     var File:Boolean,
     var FileType:Int,
     var FileBase64:String? = null,
-    var FileExtension:String? = null
+    var FileName:String? = null,
+    var FileExtension:String? = null,
+    var Longitude:Double? = null,
+    var Latitude:Double? = null
 )

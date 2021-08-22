@@ -35,12 +35,12 @@ import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.message_fragment.*
 import java.io.ByteArrayOutputStream
 
-
 class MessageFragment : Fragment() {
     private lateinit var viewModel: MessageViewModel
     private lateinit var senderUserId: String
     private lateinit var receiverUserId: String
     private lateinit var messageAdapter: MessageAdapter
+    private lateinit var getMessageDto: GetMessageDto
 
     private val SELECT_IMAGE_CODE = 1000
     private val SELECT_VIDEO_CODE = 1001
@@ -56,6 +56,7 @@ class MessageFragment : Fragment() {
     lateinit var locationManager: LocationManager
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,12 +83,12 @@ class MessageFragment : Fragment() {
             textMessageFirstLastName.text = "${MessageFragmentArgs.fromBundle(it).firstname} ${MessageFragmentArgs.fromBundle(it).lastname}"
         }
         senderUserId = HelperService.getTokenSharedPreference()!!.UserId
+        getMessageDto = GetMessageDto(senderUserId, receiverUserId)
 
         messageAdapter = MessageAdapter(arrayListOf())
         recyclerViewMessageFragment.layoutManager = LinearLayoutManager(context)
         recyclerViewMessageFragment.adapter = messageAdapter
 
-        val getMessageDto = GetMessageDto(senderUserId, receiverUserId)
         getMessage(getMessageDto)
 
         popupMenu()
@@ -101,20 +102,17 @@ class MessageFragment : Fragment() {
 
         nestedScrollViewMessageFragment.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             nestedScrollViewMessageFragment.post(Runnable {
-                nestedScrollViewMessageFragment.scrollTo(
-                    0, nestedScrollViewMessageFragment.getChildAt(
-                        0
-                    ).height
-                )
+                nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
             })
         }
 
-        HelperService.hubConnectionInstance.on("receiveMessage", { receiveMessage->
+        HelperService.hubConnectionInstance.on("receiveMessage", { receiveMessage ->
             receiveMessage(receiveMessage)
         }, String::class.java)
 
-        HelperService.hubConnectionInstance.on("receiveFile", { receiveFile->
-            receiveMessage(receiveFile)
+        HelperService.hubConnectionInstance.on("receiveFile", { receiveFile ->
+            messageAdapter.clearData()
+            getMessage(getMessageDto)
         }, String::class.java)
 
         HelperService.hubConnectionInstance.on("userDisconnected", { disconnectedUserId ->
@@ -145,6 +143,9 @@ class MessageFragment : Fragment() {
             false,
             FileType.NoFile.fileType,
             null,
+            null,
+            null,
+            null,
             null
         )
 
@@ -160,6 +161,9 @@ class MessageFragment : Fragment() {
             0,
             false,
             FileType.NoFile.fileType,
+            null,
+            null,
+            null,
             null
         )
 
@@ -220,7 +224,7 @@ class MessageFragment : Fragment() {
     private fun receiveMessage(message: String){
         activity?.runOnUiThread{
             val unixTime = System.currentTimeMillis() / 1000L
-            val newMessageDto = Message("0", receiverUserId, senderUserId, message, 0, unixTime, 0,false, FileType.NoFile.fileType,null)
+            val newMessageDto = Message("0", receiverUserId, senderUserId, message, 0, unixTime, 0,false, FileType.NoFile.fileType,null,null,null,null)
             messageAdapter.messageList.add(newMessageDto)
             Log.i("OkHttp", messageAdapter.messageList[messageAdapter.itemCount - 1].toString())
             messageAdapter.notifyDataSetChanged()
@@ -262,7 +266,21 @@ class MessageFragment : Fragment() {
             longitude = lastLocation.longitude
             Log.i("OkHttp","Latitude: $latitude")
             Log.i("OkHttp","Longitude: $longitude")
+            val sendFileMessageDto = SendMessageDto(
+                senderUserId,
+                receiverUserId,
+                null,
+                true,
+                FileType.Location.fileType,
+                null,
+                null,
+                null,
+                longitude,
+                latitude)
+            sendMessage(sendFileMessageDto)
             stopLocationRequest()
+            messageAdapter.clearData()
+            getMessage(getMessageDto)
         }
     }
 
@@ -293,7 +311,7 @@ class MessageFragment : Fragment() {
 
     private fun selectFile() {
         val intentFile = Intent(Intent.ACTION_GET_CONTENT)
-        intentFile.type = "application/*"
+        intentFile.type = "*/*"
         startActivityForResult(intentFile, SELECT_FILE_CODE)
     }
 
@@ -356,8 +374,13 @@ class MessageFragment : Fragment() {
                             true,
                             FileType.Image.fileType,
                             fileToBase64(it),
-                            fileType(it))
+                            fileName(it),
+                            fileExtension(it),
+                            null,
+                            null)
                         sendMessage(sendFileMessageDto)
+                        messageAdapter.clearData()
+                        getMessage(getMessageDto)
                     }
                 }
                 SELECT_VIDEO_CODE -> {
@@ -369,8 +392,13 @@ class MessageFragment : Fragment() {
                             true,
                             FileType.Video.fileType,
                             fileToBase64(it),
-                            fileType(it))
+                            fileName(it),
+                            fileExtension(it),
+                            null,
+                            null)
                         sendMessage(sendFileMessageDto)
+                        messageAdapter.clearData()
+                        getMessage(getMessageDto)
                     }
                 }
                 SELECT_FILE_CODE -> {
@@ -382,8 +410,13 @@ class MessageFragment : Fragment() {
                             true,
                             FileType.File.fileType,
                             fileToBase64(it),
-                            fileType(it))
+                            fileName(it),
+                            fileExtension(it),
+                            null,
+                            null)
                         sendMessage(sendFileMessageDto)
+                        messageAdapter.clearData()
+                        getMessage(getMessageDto)
                     }
                 }
                 SELECT_AUDIO_CODE -> {
@@ -395,8 +428,13 @@ class MessageFragment : Fragment() {
                             true,
                             FileType.Audio.fileType,
                             fileToBase64(it),
-                            fileType(it))
+                            fileName(it),
+                            fileExtension(it),
+                            null,
+                            null)
                         sendMessage(sendFileMessageDto)
+                        messageAdapter.clearData()
+                        getMessage(getMessageDto)
                     }
                 }
             }
@@ -411,7 +449,11 @@ class MessageFragment : Fragment() {
         return Base64.encodeToString(byteArray, Base64.NO_WRAP)
     }
 
-    private fun fileType(it: Uri): String {
+    private fun fileName(it: Uri): String {
+        return DocumentFile.fromSingleUri(requireContext(), it)?.name.toString().substringBeforeLast('.', "")
+    }
+
+    private fun fileExtension(it: Uri): String {
         return DocumentFile.fromSingleUri(requireContext(), it)?.name.toString().substringAfterLast('.', "")
     }
 

@@ -7,9 +7,11 @@ data class MessageHistoryDto(
     @SerializedName("firstName") val Firstname: String,
     @SerializedName("lastName") val Lastname: String,
     @SerializedName("photoPath") val PhotoPath: String,
-    @SerializedName("messageText") var MessageText: String,
+    @SerializedName("messageText") var MessageText: String?=null,
     @SerializedName("messageDate") val MessageDate: String,
     @SerializedName("sender") var Sender: Boolean,
     @SerializedName("readStatus") var ReadStatus: Boolean,
-    @SerializedName("file") var File: Boolean
+    @SerializedName("file") var File: Boolean,
+    @SerializedName("fileType") var FileType: Int
+
 )

@@ -92,8 +92,13 @@ class HelperService {
 
         fun loadImageFromPicasso(url: String, imageView: ImageView){
             val baseImageUrl = "${Api.baseImageURL}/userImages/${url}"
-            Picasso.get().load(baseImageUrl).into(imageView);
+            Picasso.get().load(baseImageUrl).into(imageView)
             Log.i("Message", baseImageUrl)
+        }
+
+        fun loadImageForMessageFromPicasso(url: String, imageView: ImageView){
+            val baseImageUrl = "${Api.baseUrl}/${url}"
+            Picasso.get().load(baseImageUrl).into(imageView)
         }
 
         fun connectHub(){
