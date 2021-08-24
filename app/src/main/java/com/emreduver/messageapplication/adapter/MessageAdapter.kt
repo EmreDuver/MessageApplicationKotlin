@@ -57,11 +57,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                         holder.view.MessageSentImage.visibility = View.VISIBLE
                     }
                     FileType.Video.fileType -> {
-                        holder.view.MessageSentVideo.setVideoURI(Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}"))
-                        val control = MediaController(holder.view.MessageSentVideo.context)
-                        control.setMediaPlayer( holder.view.MessageSentVideo)
-                        holder.view.MessageSentVideo.setMediaController(control)
-                        holder.view.MessageSentVideo.visibility = View.VISIBLE
+                        holder.view.cardViewMessageSentVideo.visibility = View.VISIBLE
                     }
                     FileType.File.fileType -> {
                         val fileName = messageList[position].FileName
@@ -91,11 +87,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                         holder.view.MessageReceiveImage.visibility = View.VISIBLE
                     }
                     FileType.Video.fileType -> {
-                        holder.view.MessageReceiveVideo.setVideoURI(Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}"))
-                        val control = MediaController(holder.view.MessageReceiveVideo.context)
-                        control.setMediaPlayer( holder.view.MessageReceiveVideo)
-                        holder.view.MessageReceiveVideo.setMediaController(control)
-                        holder.view.MessageReceiveVideo.visibility = View.VISIBLE
+                        holder.view.cardViewMessageReceiveVideo.visibility = View.VISIBLE
                     }
                     FileType.File.fileType -> {
                         val fileName = messageList[position].FileName
@@ -107,9 +99,8 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                         holder.view.cardViewMessageReceiveAudio.visibility = View.VISIBLE
                     }
                     FileType.Location.fileType -> {
-                        val geocoder = Geocoder(holder.view.cardViewMessageReceiveLocation.context, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(messageList[position].Latitude!!, messageList[position].Longitude!!, 1)
-                        holder.view.textMessageReceiveLocation.text = addresses[0].getAddressLine(0).toString()
+                        val address = Geocoder(holder.view.cardViewMessageReceiveLocation.context, Locale.getDefault()).getFromLocation(messageList[position].Latitude!!, messageList[position].Longitude!!, 1)[0].getAddressLine(0).toString()
+                        holder.view.textMessageReceiveLocation.text = address
                         holder.view.cardViewMessageReceiveLocation.visibility = View.VISIBLE
                     }
                 }
@@ -128,6 +119,60 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                     }
                 })
             }
+        }
+
+        holder.view.buttonPlayMessageSentVideo.setOnClickListener {
+            holder.view.videoViewMessageSentVideo.setVideoURI(Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}"))
+            holder.view.imageViewMessageSentVideo.visibility = View.GONE
+            holder.view.buttonPlayMessageSentVideo.visibility = View.GONE
+            holder.view.videoViewMessageSentVideo.visibility = View.VISIBLE
+            holder.view.buttonPauseMessageSentVideo.visibility = View.VISIBLE
+            holder.view.buttonStopMessageSentVideo.visibility = View.VISIBLE
+            holder.view.videoViewMessageSentVideo.start()
+        }
+
+        holder.view.buttonPlayMessageReceiveVideo.setOnClickListener {
+            holder.view.videoViewMessageReceiveVideo.setVideoURI(Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}"))
+            holder.view.imageViewMessageReceiveVideo.visibility = View.GONE
+            holder.view.buttonPlayMessageReceiveVideo.visibility = View.GONE
+            holder.view.videoViewMessageReceiveVideo.visibility = View.VISIBLE
+            holder.view.buttonPauseMessageReceiveVideo.visibility = View.VISIBLE
+            holder.view.buttonStopMessageReceiveVideo.visibility = View.VISIBLE
+            holder.view.videoViewMessageReceiveVideo.start()
+        }
+
+        holder.view.buttonPauseMessageSentVideo.setOnClickListener {
+            if(holder.view.videoViewMessageSentVideo.isPlaying) {
+                holder.view.videoViewMessageSentVideo.pause()
+            } else{
+                holder.view.videoViewMessageSentVideo.start()
+            }
+        }
+
+        holder.view.buttonPauseMessageReceiveVideo.setOnClickListener {
+            if(holder.view.videoViewMessageReceiveVideo.isPlaying) {
+                holder.view.videoViewMessageReceiveVideo.pause()
+            } else{
+                holder.view.videoViewMessageReceiveVideo.start()
+            }
+        }
+
+        holder.view.buttonStopMessageSentVideo.setOnClickListener {
+            holder.view.imageViewMessageSentVideo.visibility = View.VISIBLE
+            holder.view.buttonPlayMessageSentVideo.visibility = View.VISIBLE
+            holder.view.videoViewMessageSentVideo.visibility = View.GONE
+            holder.view.buttonStopMessageSentVideo.visibility = View.GONE
+            holder.view.buttonPauseMessageSentVideo.visibility = View.GONE
+            holder.view.videoViewMessageSentVideo.stopPlayback()
+        }
+
+        holder.view.buttonStopMessageReceiveVideo.setOnClickListener {
+            holder.view.imageViewMessageReceiveVideo.visibility = View.VISIBLE
+            holder.view.buttonPlayMessageReceiveVideo.visibility = View.VISIBLE
+            holder.view.videoViewMessageReceiveVideo.visibility = View.GONE
+            holder.view.buttonStopMessageReceiveVideo.visibility = View.GONE
+            holder.view.buttonPauseMessageReceiveVideo.visibility = View.GONE
+            holder.view.videoViewMessageReceiveVideo.stopPlayback()
         }
 
         holder.view.cardViewMessageSentLocation.setOnClickListener{

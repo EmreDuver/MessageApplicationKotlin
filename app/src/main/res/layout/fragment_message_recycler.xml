@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
     <data>
+
         <variable
             name="message"
             type="com.emreduver.messageapplication.entities.receive.message.Message" />
@@ -40,7 +41,7 @@
                     android:text="@{message.text}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -48,17 +49,78 @@
                 android:id="@+id/MessageReceiveImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:padding="5dp"
-                android:visibility="gone"/>
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
 
-            <VideoView
-                android:id="@+id/MessageReceiveVideo"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_margin="5dp"
-                android:visibility="gone"/>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewMessageReceiveVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/message_receive_gray"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageViewMessageReceiveVideo"
+                        android:layout_width="300dp"
+                        android:layout_height="175dp"
+                        android:layout_margin="5dp"
+                        android:background="@color/black"
+                        android:visibility="visible" />
+
+                    <VideoView
+                        android:id="@+id/videoViewMessageReceiveVideo"
+                        android:layout_width="350dp"
+                        android:layout_height="350dp"
+                        android:layout_margin="5dp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonPlayMessageReceiveVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_play_arrow_24"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonPauseMessageReceiveVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_pause_24"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonStopMessageReceiveVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_stop_24"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
 
             <LinearLayout
                 android:id="@+id/MessageReceiveFile"
@@ -71,12 +133,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_baseline_insert_drive_file_24"
-                        app:tint="@color/black"
-                        android:layout_gravity="center"/>
+                        app:tint="@color/black" />
 
                     <TextView
                         android:id="@+id/MessageReceiveFileName"
@@ -84,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textColor="@color/black"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -96,20 +159,21 @@
                         android:id="@+id/MessageReceiveFileOpen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_receive_gray"
                         android:outlineProvider="none"
-                        app:borderWidth="0dp"
                         android:src="@drawable/ic_baseline_open_in_new_24"
-                        app:fabSize="mini"/>
+                        app:backgroundTint="@color/message_receive_gray"
+                        app:borderWidth="0dp"
+                        app:fabSize="mini" />
+
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/MessageReceiveFileDownload"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_receive_gray"
                         android:outlineProvider="none"
+                        android:src="@drawable/ic_baseline_file_download_24"
+                        app:backgroundTint="@color/message_receive_gray"
                         app:borderWidth="0dp"
-                        app:fabSize="mini"
-                        android:src="@drawable/ic_baseline_file_download_24"/>
+                        app:fabSize="mini" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -131,29 +195,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:padding="5dp"/>
+                        android:padding="5dp" />
 
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnMessageReceiveAudioPlay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_receive_gray"
                         android:outlineProvider="none"
+                        android:src="@drawable/ic_baseline_play_arrow_24"
+                        app:backgroundTint="@color/message_receive_gray"
                         app:borderWidth="0dp"
-                        app:fabSize="mini"
-                        android:src="@drawable/ic_baseline_play_arrow_24"/>
+                        app:fabSize="mini" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnMessageReceiveAudioStop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_receive_gray"
                         android:outlineProvider="none"
-                        app:borderWidth="0dp"
-                        app:fabSize="mini"
                         android:src="@drawable/ic_baseline_stop_24"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        app:backgroundTint="@color/message_receive_gray"
+                        app:borderWidth="0dp"
+                        app:fabSize="mini" />
 
                     <com.google.android.material.slider.Slider
                         android:id="@+id/sliderMessageReceiveAudio"
@@ -174,6 +238,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/message_receive_gray"
+                app:cardElevation="0dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone">
@@ -181,18 +246,20 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="300dp"
-                        android:layout_height="175dp"
-                        android:src="@drawable/google_maps_image"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_location_on_24" />
+
                     <TextView
                         android:id="@+id/textMessageReceiveLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -224,8 +291,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="@color/message_sent_green"
             android:clickable="true"
@@ -247,7 +314,7 @@
                     android:text="@{message.text}"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -255,17 +322,77 @@
                 android:id="@+id/MessageSentImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:padding="5dp"
-                android:visibility="gone"/>
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
 
-            <VideoView
-                android:id="@+id/MessageSentVideo"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_margin="5dp"
-                android:visibility="gone"/>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewMessageSentVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/message_receive_gray"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageViewMessageSentVideo"
+                        android:layout_width="300dp"
+                        android:layout_height="175dp"
+                        android:layout_margin="5dp"
+                        android:background="@color/black"
+                        android:visibility="visible" />
+
+                    <VideoView
+                        android:id="@+id/videoViewMessageSentVideo"
+                        android:layout_width="350dp"
+                        android:layout_height="350dp"
+                        android:layout_margin="5dp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonPlayMessageSentVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_play_arrow_24"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonPauseMessageSentVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_pause_24"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/buttonStopMessageSentVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:outlineProvider="none"
+                            android:src="@drawable/ic_baseline_stop_24"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/message_receive_gray"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:id="@+id/MessageSentFile"
@@ -278,12 +405,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_baseline_insert_drive_file_24"
-                        app:tint="@color/black"
-                        android:layout_gravity="center"/>
+                        app:tint="@color/black" />
 
                     <TextView
                         android:id="@+id/MessageSentFileName"
@@ -291,7 +419,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -303,29 +431,30 @@
                         android:id="@+id/MessageSentFileOpen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_sent_green"
                         android:outlineProvider="none"
-                        app:borderWidth="0dp"
                         android:src="@drawable/ic_baseline_open_in_new_24"
-                        app:fabSize="mini"/>
+                        app:backgroundTint="@color/message_sent_green"
+                        app:borderWidth="0dp"
+                        app:fabSize="mini" />
+
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/MessageSentFileDownload"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_sent_green"
                         android:outlineProvider="none"
+                        android:src="@drawable/ic_baseline_file_download_24"
+                        app:backgroundTint="@color/message_sent_green"
                         app:borderWidth="0dp"
-                        app:fabSize="mini"
-                        android:src="@drawable/ic_baseline_file_download_24"/>
+                        app:fabSize="mini" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewMessageSentAudio"
-                android:backgroundTint="@color/message_sent_green"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/message_sent_green"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -338,29 +467,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:padding="5dp"/>
+                        android:padding="5dp" />
 
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnMessageSentAudioPlay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_sent_green"
                         android:outlineProvider="none"
+                        android:src="@drawable/ic_baseline_play_arrow_24"
+                        app:backgroundTint="@color/message_sent_green"
                         app:borderWidth="0dp"
-                        app:fabSize="mini"
-                        android:src="@drawable/ic_baseline_play_arrow_24"/>
+                        app:fabSize="mini" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnMessageSentAudioStop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:backgroundTint="@color/message_sent_green"
                         android:outlineProvider="none"
-                        app:borderWidth="0dp"
-                        app:fabSize="mini"
                         android:src="@drawable/ic_baseline_stop_24"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        app:backgroundTint="@color/message_sent_green"
+                        app:borderWidth="0dp"
+                        app:fabSize="mini" />
 
                     <com.google.android.material.slider.Slider
                         android:id="@+id/sliderMessageSentAudio"
@@ -382,6 +511,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/message_sent_green"
+                app:cardElevation="0dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone">
@@ -389,18 +519,20 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="300dp"
-                        android:layout_height="175dp"
-                        android:src="@drawable/google_maps_image"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_location_on_24" />
+
                     <TextView
                         android:id="@+id/textMessageSentLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

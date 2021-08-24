@@ -33,8 +33,8 @@ class UserSearchFragment : Fragment() {
         recyclerViewUserSearch.layoutManager = LinearLayoutManager(context)
         clearUserList()
 
-        editTextMessage.setEndIconOnClickListener {
-            userSearch(editTextMessage.editText?.text.toString())
+        editTextUserSearch.setEndIconOnClickListener {
+            userSearch(editTextUserSearch.editText?.text.toString())
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +42,7 @@ class UserSearchFragment : Fragment() {
 
 
     private fun userSearch(userName:String) {
-        Log.i("OkHttp","getUsersBySearch'e girdi")
+        Log.i("OkHttp","userSearch'e girdi")
         viewModel.userSearch(userName).observe(viewLifecycleOwner) { status ->
             when (status) {
                 true -> {
@@ -56,12 +56,13 @@ class UserSearchFragment : Fragment() {
                 }
             }
         }
-        Log.i("OkHttp","getUsersBySearch'den çıktı")
+        Log.i("OkHttp","userSearch'den çıktı")
     }
 
     private fun errorListener() {
         viewModel.errorState.observe(viewLifecycleOwner, {
             HelperService.showMessageByToast(it)
+            editTextUserSearch.editText?.setText("")
         })
     }
 
@@ -70,7 +71,7 @@ class UserSearchFragment : Fragment() {
             userSearchAdapter.userSearchList = users
             userSearchAdapter.notifyDataSetChanged()
         }
-        Log.i("OkHttp","getPosts'a çıktı")
+        Log.i("OkHttp","getUsers'dan çıktı")
     }
 
     private fun clearUserList(){

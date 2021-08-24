@@ -94,7 +94,7 @@
                 android:gravity="right"
                 android:text="@{messageHistory.messageDate}"
                 android:textColor="@color/black"
-                android:textSize="11dp" />
+                android:textSize="10dp" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

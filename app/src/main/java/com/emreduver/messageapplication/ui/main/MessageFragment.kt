@@ -74,6 +74,32 @@ class MessageFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
+        HelperService.hubConnectionInstance.on("receiveMessage", { receiveMessage ->
+            receiveMessage(receiveMessage)
+        }, String::class.java)
+
+        HelperService.hubConnectionInstance.on("receiveFile", { receiveFile ->
+            var a = receiveFile
+            Log.i("OkHttp", receiveFile)
+        }, String::class.java)
+
+        HelperService.hubConnectionInstance.on("userDisconnected", { disconnectedUserId ->
+            Log.i("Konsol", disconnectedUserId)
+            Log.i("Konsol", receiverUserId)
+            if (disconnectedUserId == receiverUserId && textMessageStatus != null) {
+                textMessageStatus.text = "Çevrimdışı"
+            }
+        }, String::class.java)
+
+        HelperService.hubConnectionInstance.on("userConnected", { connectedUserId ->
+            Log.i("Konsol", connectedUserId)
+            Log.i("Konsol", receiverUserId)
+            if (connectedUserId == receiverUserId && textMessageStatus != null) {
+                textMessageStatus.text = "Çevrimiçi"
+            }
+
+        }, String::class.java)
+
         arguments?.let {
             receiverUserId = MessageFragmentArgs.fromBundle(it).userId
             HelperService.loadImageFromPicasso(
@@ -105,32 +131,6 @@ class MessageFragment : Fragment() {
                 nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
             })
         }
-
-        HelperService.hubConnectionInstance.on("receiveMessage", { receiveMessage ->
-            receiveMessage(receiveMessage)
-        }, String::class.java)
-
-        HelperService.hubConnectionInstance.on("receiveFile", { receiveFile ->
-            messageAdapter.clearData()
-            getMessage(getMessageDto)
-        }, String::class.java)
-
-        HelperService.hubConnectionInstance.on("userDisconnected", { disconnectedUserId ->
-            Log.i("Konsol", disconnectedUserId)
-            Log.i("Konsol", receiverUserId)
-            if (disconnectedUserId == receiverUserId && textMessageStatus != null) {
-                textMessageStatus.text = "Çevrimdışı"
-            }
-        }, String::class.java)
-
-        HelperService.hubConnectionInstance.on("userConnected", { connectedUserId ->
-            Log.i("Konsol", connectedUserId)
-            Log.i("Konsol", receiverUserId)
-            if (connectedUserId == receiverUserId && textMessageStatus != null) {
-                textMessageStatus.text = "Çevrimiçi"
-            }
-
-        }, String::class.java)
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -225,6 +225,19 @@ class MessageFragment : Fragment() {
         activity?.runOnUiThread{
             val unixTime = System.currentTimeMillis() / 1000L
             val newMessageDto = Message("0", receiverUserId, senderUserId, message, 0, unixTime, 0,false, FileType.NoFile.fileType,null,null,null,null)
+            messageAdapter.messageList.add(newMessageDto)
+            Log.i("OkHttp", messageAdapter.messageList[messageAdapter.itemCount - 1].toString())
+            messageAdapter.notifyDataSetChanged()
+            nestedScrollViewMessageFragment.post(Runnable {
+                nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
+            })
+        }
+    }
+
+    private fun receiveFile(filePath: String){
+        activity?.runOnUiThread{
+            val unixTime = System.currentTimeMillis() / 1000L
+            val newMessageDto = Message("0", receiverUserId, senderUserId, filePath, 0, unixTime, 0,false, FileType.NoFile.fileType,null,null,null,null)
             messageAdapter.messageList.add(newMessageDto)
             Log.i("OkHttp", messageAdapter.messageList[messageAdapter.itemCount - 1].toString())
             messageAdapter.notifyDataSetChanged()

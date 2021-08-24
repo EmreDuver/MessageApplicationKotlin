@@ -1,5 +1,6 @@
 package com.emreduver.messageapplication.services.api
 
+import android.util.Log
 import com.emreduver.messageapplication.constants.Api
 import com.emreduver.messageapplication.entities.receive.result.ApiResult
 import com.emreduver.messageapplication.entities.receive.user.UserDto
@@ -94,6 +95,7 @@ class UserService {
                 return result.body() as ApiResult<Unit>
             }
             catch (e:Exception){
+                Log.i("OkHttp",e.toString())
                 return HelperService.handleException(e)
             }
         }
