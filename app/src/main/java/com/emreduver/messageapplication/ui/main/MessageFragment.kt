@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
@@ -41,6 +40,8 @@ class MessageFragment : Fragment() {
     private lateinit var receiverUserId: String
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var getMessageDto: GetMessageDto
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var locationManager: LocationManager
 
     private val SELECT_IMAGE_CODE = 1000
     private val SELECT_VIDEO_CODE = 1001
@@ -52,52 +53,74 @@ class MessageFragment : Fragment() {
     private val AUDIO_PERMISSION_CODE = 1103
     private val LOCATION_PERMISSION_CODE = 1104
 
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    lateinit var locationManager: LocationManager
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.message_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+
+        HelperService.hubConnectionInstance.on("receiveLocation", { coordinate ->
+            Log.i("OkHttp","receiveLocation")
+            val coordinateLatitude = coordinate.substringBeforeLast("/").replace(",",".").toDouble()
+            val coordinateLongitude = coordinate.substringAfterLast("/").replace(",",".").toDouble()
+            receiveLocation(coordinateLatitude,coordinateLongitude)
+        }, String::class.java)
+
+        HelperService.hubConnectionInstance.on("sendFile", { filePath ->
+            when (filePath.substringBefore("/")) {
+                FileType.Image.name.toLowerCase().replace("ı","i") + "s" -> {
+                    sendFileMessage(FileType.Image.fileType,filePath,(filePath.substringAfterLast("/")).substringBeforeLast("."),null,null)
+                }
+                FileType.Video.name.toLowerCase() + "s" -> {
+                    sendFileMessage(FileType.Video.fileType,filePath,(filePath.substringAfterLast("/")).substringBeforeLast("."),null,null)
+                }
+                FileType.File.name.toLowerCase() + "s" -> {
+                    sendFileMessage(FileType.File.fileType,filePath,(filePath.substringAfterLast("/")).substringBeforeLast("."),null,null)
+                }
+                FileType.Audio.name.toLowerCase() + "s" -> {
+                    sendFileMessage(FileType.Audio.fileType,filePath,(filePath.substringAfterLast("/")).substringBeforeLast("."),null,null)
+                }
+            }
+        }, String::class.java)
+
 
         HelperService.hubConnectionInstance.on("receiveMessage", { receiveMessage ->
             receiveMessage(receiveMessage)
         }, String::class.java)
 
         HelperService.hubConnectionInstance.on("receiveFile", { receiveFile ->
-            var a = receiveFile
-            Log.i("OkHttp", receiveFile)
+            when (receiveFile.substringBefore("/")) {
+                FileType.Image.name.toLowerCase().replace("ı","i") + "s" -> {
+                    receiveFile(FileType.Image.fileType,receiveFile,(receiveFile.substringAfterLast("/")).substringBeforeLast("."))
+                }
+                FileType.Video.name.toLowerCase() + "s" -> {
+                    receiveFile(FileType.Video.fileType,receiveFile,(receiveFile.substringAfterLast("/")).substringBeforeLast("."))
+                }
+                FileType.File.name.toLowerCase() + "s" -> {
+                    receiveFile(FileType.File.fileType,receiveFile,(receiveFile.substringAfterLast("/")).substringBeforeLast("."))
+                }
+                FileType.Audio.name.toLowerCase() + "s" -> {
+                    receiveFile(FileType.Audio.fileType,receiveFile,(receiveFile.substringAfterLast("/")).substringBeforeLast("."))
+                }
+            }
         }, String::class.java)
 
         HelperService.hubConnectionInstance.on("userDisconnected", { disconnectedUserId ->
-            Log.i("Konsol", disconnectedUserId)
-            Log.i("Konsol", receiverUserId)
             if (disconnectedUserId == receiverUserId && textMessageStatus != null) {
                 textMessageStatus.text = "Çevrimdışı"
             }
         }, String::class.java)
 
         HelperService.hubConnectionInstance.on("userConnected", { connectedUserId ->
-            Log.i("Konsol", connectedUserId)
-            Log.i("Konsol", receiverUserId)
             if (connectedUserId == receiverUserId && textMessageStatus != null) {
                 textMessageStatus.text = "Çevrimiçi"
             }
-
         }, String::class.java)
 
         arguments?.let {
@@ -166,23 +189,29 @@ class MessageFragment : Fragment() {
             null,
             null
         )
-
         sendMessage(sendMessageDto)
-        messageAdapter.messageList.add(newMessageDto)
-        nestedScrollViewMessageFragment.post(Runnable {
-            nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
-        })
-        messageAdapter.notifyDataSetChanged()
-        editTextMessage.editText?.text?.clear()
+        if(!editTextMessage.editText?.text.toString().isNullOrEmpty()){
+            messageAdapter.messageList.add(newMessageDto)
+            nestedScrollViewMessageFragment.post(Runnable {
+                nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
+            })
+            messageAdapter.notifyDataSetChanged()
+            editTextMessage.editText?.text?.clear()
+        }
     }
 
     private fun sendMessage(sendMessageDto: SendMessageDto){
-
         viewModel.sendMessage(sendMessageDto).observe(viewLifecycleOwner){
-
             when(it){
-                true -> Log.i("OkHttp", "mesaj yollandı")
-                false -> errorListener()
+                true -> {
+                    Log.i("OkHttp", "mesaj yollandı")
+                }
+                false -> {
+                    progressBarMessageFragment.visibility = View.GONE
+                    progressBarTextMessageFragment.visibility = View.GONE
+                    cardViewSendMessage.isClickable = true
+                    errorListener()
+                }
             }
         }
     }
@@ -226,7 +255,6 @@ class MessageFragment : Fragment() {
             val unixTime = System.currentTimeMillis() / 1000L
             val newMessageDto = Message("0", receiverUserId, senderUserId, message, 0, unixTime, 0,false, FileType.NoFile.fileType,null,null,null,null)
             messageAdapter.messageList.add(newMessageDto)
-            Log.i("OkHttp", messageAdapter.messageList[messageAdapter.itemCount - 1].toString())
             messageAdapter.notifyDataSetChanged()
             nestedScrollViewMessageFragment.post(Runnable {
                 nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
@@ -234,12 +262,23 @@ class MessageFragment : Fragment() {
         }
     }
 
-    private fun receiveFile(filePath: String){
+    private fun receiveLocation(coordinateLatitude:Double,coordinateLongitude:Double){
         activity?.runOnUiThread{
             val unixTime = System.currentTimeMillis() / 1000L
-            val newMessageDto = Message("0", receiverUserId, senderUserId, filePath, 0, unixTime, 0,false, FileType.NoFile.fileType,null,null,null,null)
+            val newMessageDto = Message("0", receiverUserId, senderUserId, null, 0, unixTime, 0,true, FileType.Location.fileType,null,null,coordinateLongitude,coordinateLatitude)
             messageAdapter.messageList.add(newMessageDto)
-            Log.i("OkHttp", messageAdapter.messageList[messageAdapter.itemCount - 1].toString())
+            messageAdapter.notifyDataSetChanged()
+            nestedScrollViewMessageFragment.post(Runnable {
+                nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
+            })
+        }
+    }
+
+    private fun receiveFile(fileType: Int,filePath: String,fileName: String){
+        activity?.runOnUiThread{
+            val unixTime = System.currentTimeMillis() / 1000L
+            val newMessageDto = Message("0", receiverUserId, senderUserId, null, 0, unixTime, 0,true, fileType,filePath,fileName,null,null)
+            messageAdapter.messageList.add(newMessageDto)
             messageAdapter.notifyDataSetChanged()
             nestedScrollViewMessageFragment.post(Runnable {
                 nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
@@ -292,8 +331,7 @@ class MessageFragment : Fragment() {
                 latitude)
             sendMessage(sendFileMessageDto)
             stopLocationRequest()
-            messageAdapter.clearData()
-            getMessage(getMessageDto)
+            sendFileMessage(FileType.Location.fileType,null,null,latitude,longitude)
         }
     }
 
@@ -392,8 +430,9 @@ class MessageFragment : Fragment() {
                             null,
                             null)
                         sendMessage(sendFileMessageDto)
-                        messageAdapter.clearData()
-                        getMessage(getMessageDto)
+                        progressBarMessageFragment.visibility = View.VISIBLE
+                        progressBarTextMessageFragment.visibility = View.VISIBLE
+                        cardViewSendMessage.isClickable = false
                     }
                 }
                 SELECT_VIDEO_CODE -> {
@@ -410,8 +449,9 @@ class MessageFragment : Fragment() {
                             null,
                             null)
                         sendMessage(sendFileMessageDto)
-                        messageAdapter.clearData()
-                        getMessage(getMessageDto)
+                        progressBarMessageFragment.visibility = View.VISIBLE
+                        progressBarTextMessageFragment.visibility = View.VISIBLE
+                        cardViewSendMessage.isClickable = false
                     }
                 }
                 SELECT_FILE_CODE -> {
@@ -428,8 +468,9 @@ class MessageFragment : Fragment() {
                             null,
                             null)
                         sendMessage(sendFileMessageDto)
-                        messageAdapter.clearData()
-                        getMessage(getMessageDto)
+                        progressBarMessageFragment.visibility = View.VISIBLE
+                        progressBarTextMessageFragment.visibility = View.VISIBLE
+                        cardViewSendMessage.isClickable = false
                     }
                 }
                 SELECT_AUDIO_CODE -> {
@@ -445,13 +486,31 @@ class MessageFragment : Fragment() {
                             fileExtension(it),
                             null,
                             null)
+                        progressBarMessageFragment.visibility = View.VISIBLE
+                        progressBarTextMessageFragment.visibility = View.VISIBLE
+                        cardViewSendMessage.isClickable = false
                         sendMessage(sendFileMessageDto)
-                        messageAdapter.clearData()
-                        getMessage(getMessageDto)
                     }
                 }
             }
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun sendFileMessage(fileType: Int, filePath: String?, fileName: String?, coordinateLatitude: Double?,coordinateLongitude: Double?) {
+        activity?.runOnUiThread {
+            val unixTime = System.currentTimeMillis() / 1000L
+
+            val newMessage = Message("0", senderUserId, receiverUserId, null, 0, unixTime, 0, true, fileType, filePath, fileName, coordinateLongitude, coordinateLatitude)
+
+            messageAdapter.messageList.add(newMessage)
+            messageAdapter.notifyDataSetChanged()
+            progressBarMessageFragment.visibility = View.GONE
+            progressBarTextMessageFragment.visibility = View.GONE
+            cardViewSendMessage.isClickable = true
+            nestedScrollViewMessageFragment.post(Runnable {
+                nestedScrollViewMessageFragment.scrollTo(0, nestedScrollViewMessageFragment.getChildAt(0).height)
+            })
         }
     }
 
@@ -520,6 +579,9 @@ class MessageFragment : Fragment() {
                             Manifest.permission.ACCESS_COARSE_LOCATION)
                         requestPermissions(permissions, LOCATION_PERMISSION_CODE)
                     }else{
+                        progressBarMessageFragment.visibility = View.VISIBLE
+                        progressBarTextMessageFragment.visibility = View.VISIBLE
+                        cardViewSendMessage.isClickable = false
                         getLocation()
                     }
                     true
@@ -543,5 +605,4 @@ class MessageFragment : Fragment() {
             }
         }
     }
-
 }

@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.MessageFragment">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBarMessageFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="2dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/progressBarTextMessageFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="2dp"
+        android:text="Dosyanız yükleniyor lütfen bekleyiniz..."
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_anchor="@+id/progressBarMessageFragment"
+        app:layout_anchorGravity="bottom|center"
+        android:visibility="gone"/>
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -13,44 +34,44 @@
         android:layout_height="?attr/actionBarSize"
         android:backgroundTint="@color/blue">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imageMessage"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                android:layout_weight="2"
+                app:civ_border_width="2dp"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="3dp" />
 
-                <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/imageMessage"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:src="@drawable/logo"
-                    app:civ_border_width="2dp"
-                    app:civ_shadow="true"
-                    app:civ_shadow_radius="3dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="8"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="8"
-                    android:layout_marginStart="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/textMessageFirstLastName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/textMessageFirstLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
 
-                    <TextView
-                        android:id="@+id/textMessageStatus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/white" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/textMessageStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
             </LinearLayout>
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -68,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -87,9 +108,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
-                android:src="@drawable/baseline_mood_24"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true"
+                android:src="@drawable/baseline_mood_24" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextMessage"
@@ -114,8 +135,8 @@
                 android:id="@+id/cardViewSendFile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.8"
                 android:layout_marginStart="5dp"
+                android:layout_weight="0.8"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardElevation="0dp">
@@ -125,20 +146,22 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/baseline_attach_file_24" />
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewSendMessage"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:layout_gravity="center"
                 android:layout_marginStart="5dp"
-                app:cardElevation="0dp"
+                android:layout_weight="0.7"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                app:cardElevation="0dp">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/baseline_send_24"/>
+                    android:src="@drawable/baseline_send_24" />
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

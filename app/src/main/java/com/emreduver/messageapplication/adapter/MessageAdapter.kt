@@ -66,6 +66,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                         holder.view.MessageSentFile.visibility = View.VISIBLE
                     }
                     FileType.Audio.fileType -> {
+                        holder.view.textMessageSentAudioName.text = messageList[position].FileName +"."+ messageList[position].FilePath!!.substringAfterLast(".")
                         holder.view.cardViewMessageSentAudio.visibility = View.VISIBLE
                     }
                     FileType.Location.fileType -> {
@@ -96,6 +97,7 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
                         holder.view.MessageReceiveFile.visibility = View.VISIBLE
                     }
                     FileType.Audio.fileType -> {
+                        holder.view.textMessageReceiveAudioName.text = messageList[position].FileName +"."+ messageList[position].FilePath!!.substringAfterLast(".")
                         holder.view.cardViewMessageReceiveAudio.visibility = View.VISIBLE
                     }
                     FileType.Location.fileType -> {
@@ -227,7 +229,6 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             mediaPlayer=null
             val uri = Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}")
             mediaPlayer = MediaPlayer.create(holder.view.cardViewMessageSentAudio.context,uri)
-            initialiseSlider(holder.view.sliderMessageSentAudio)
             val duration = mediaPlayer?.duration!!
             mediaPlayer?.start()
             val seconds = (duration/1000)
@@ -248,10 +249,6 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             Log.i("OkHttp",seconds.toString())
             Log.i("OkHttp",minuteStr)
             Log.i("OkHttp",secondStr)
-
-            holder.view.sliderMessageSentAudio.addOnChangeListener { slider, value, fromUser ->
-                mediaPlayer?.seekTo(value.toInt())
-            }
         }
 
         holder.view.btnMessageReceiveAudioPlay.setOnClickListener {
@@ -260,7 +257,6 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             mediaPlayer=null
             val uri = Uri.parse("${Api.baseUrl}/${messageList[position].FilePath}")
             mediaPlayer = MediaPlayer.create(holder.view.cardViewMessageReceiveAudio.context,uri)
-            initialiseSlider(holder.view.sliderMessageReceiveAudio)
             val duration = mediaPlayer?.duration!!
             mediaPlayer?.start()
             val seconds = (duration/1000)
@@ -281,10 +277,6 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
             Log.i("OkHttp",seconds.toString())
             Log.i("OkHttp",minuteStr)
             Log.i("OkHttp",secondStr)
-
-            holder.view.sliderMessageReceiveAudio.addOnChangeListener { slider, value, fromUser ->
-                mediaPlayer?.seekTo(value.toInt())
-            }
         }
 
         holder.view.MessageSentFileOpen.setOnClickListener {
@@ -390,21 +382,6 @@ class MessageAdapter(var messageList: ArrayList<Message>) : RecyclerView.Adapter
         }
     }
 
-    private fun initialiseSlider(slider:Slider){
-        slider.valueTo= mediaPlayer!!.duration.toFloat()
-
-        var handler = Handler()
-        handler.postDelayed(object:Runnable {
-            override fun run(){
-                try {
-                    slider.value = mediaPlayer!!.currentPosition.toFloat()
-                    handler.postDelayed(this,1000)
-                }catch (e:Exception){
-                    slider.value = 0f
-                }
-            }
-        },0)
-    }
     fun clearData() {
         messageList.clear()
         notifyDataSetChanged()
