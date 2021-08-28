@@ -82,6 +82,10 @@ class SettingsFragment : Fragment() {
             )
             findNavController().navigate(action)
         }
+        cardViewMessageAnalysis.setOnClickListener {
+            ProgressBarSettings.visibility = View.VISIBLE
+            messageAnalysis()
+        }
         imageSettings.setOnClickListener {
             if (checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -164,7 +168,6 @@ class SettingsFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_CODE && data != null){
 
-
             val imageUri = data.data
 
             imageUri?.let{
@@ -173,6 +176,7 @@ class SettingsFragment : Fragment() {
                 } else {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
                 }
+                ProgressBarSettings.visibility = View.VISIBLE
                 addProfilePicture(bitMapToString(imageBitmap))
                 imageSettings.setImageURI(data.data)
             }
@@ -187,8 +191,14 @@ class SettingsFragment : Fragment() {
         )
         viewModel.addProfilePicture(addProfilePhotoDto).observe(viewLifecycleOwner) {
             when(it){
-                true -> HelperService.showMessageByToast("Resim değiştirme başarılı")
-                false -> errorListener()
+                true -> {
+                    HelperService.showMessageByToast("Resim değiştirme başarılı")
+                    ProgressBarSettings.visibility = View.GONE
+                }
+                false -> {
+                    ProgressBarSettings.visibility = View.GONE
+                    errorListener()
+                }
             }
         }
     }
@@ -208,6 +218,22 @@ class SettingsFragment : Fragment() {
                 }
                 false -> errorListener()
             }
+        }
+    }
+
+    private fun messageAnalysis(){
+        viewModel.messageAnalysis().observe(viewLifecycleOwner) {
+            when(it){
+                true -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Mesaj analiziniz başarıyla oluşturuldu.")
+                        .setMessage("Analiz sonuçlarınız en kısa sürede e-posta adresine gönderilecektir.")
+                        .setPositiveButton("Tamam") { dialog, which ->
+                        }.show()
+                }
+                false -> errorListener()
+            }
+            ProgressBarSettings.visibility = View.GONE
         }
     }
 

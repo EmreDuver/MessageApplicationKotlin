@@ -104,14 +104,6 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/baseline_mood_24" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextMessage"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"

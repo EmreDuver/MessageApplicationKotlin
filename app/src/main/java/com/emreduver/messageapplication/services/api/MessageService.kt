@@ -68,5 +68,18 @@ class MessageService {
                 return HelperService.handleException(e)
             }
         }
+
+        suspend fun messageAnalysis() : ApiResult<Unit>{
+            try {
+                val result = retrofitMessageServiceWithInterceptor.messageAnalysis()
+                if (!result.isSuccessful)
+                    return HelperService.handleApiError(result)
+
+                return result.body() as ApiResult<Unit>
+            }
+            catch (e:Exception){
+                return HelperService.handleException(e)
+            }
+        }
     }
 }

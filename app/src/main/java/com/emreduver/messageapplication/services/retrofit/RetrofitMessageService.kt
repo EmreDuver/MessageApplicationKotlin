@@ -8,6 +8,7 @@ import com.emreduver.messageapplication.entities.send.message.GetMessageDto
 import com.emreduver.messageapplication.entities.send.message.SendMessageDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RetrofitMessageService {
@@ -22,5 +23,8 @@ interface RetrofitMessageService {
 
     @POST(RetrofitUrl.GetMessageHistory)
     suspend fun getMessageHistory(@Body userId: String) : Response<ApiResult<ArrayList<MessageHistoryDto>>>
+
+    @GET(RetrofitUrl.MessageAnalysis)
+    suspend fun messageAnalysis() : Response<ApiResult<Unit>>
 
 }

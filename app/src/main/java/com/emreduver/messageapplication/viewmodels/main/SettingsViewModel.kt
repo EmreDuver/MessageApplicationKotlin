@@ -9,6 +9,7 @@ import com.emreduver.messageapplication.entities.receive.user.UserDto
 import com.emreduver.messageapplication.entities.send.auth.Login
 import com.emreduver.messageapplication.entities.send.user.AddProfilePhotoDto
 import com.emreduver.messageapplication.services.api.AuthService
+import com.emreduver.messageapplication.services.api.MessageService
 import com.emreduver.messageapplication.services.api.UserService
 import com.emreduver.messageapplication.utilities.IViewModelState
 import com.emreduver.messageapplication.utilities.LoadingState
@@ -52,6 +53,20 @@ class SettingsViewModel : ViewModel() , IViewModelState {
 
         viewModelScope.launch {
             val response = UserService.deleteProfilePicture(userId)
+            status.value = response.Success
+            loadingState.value = LoadingState.Loaded
+            if (!response.Success)
+                errorState.value = response.Message!!
+        }
+        return status
+    }
+
+    fun messageAnalysis(): LiveData<Boolean>{
+        loadingState.value = LoadingState.Loading
+        var status = MutableLiveData<Boolean>()
+
+        viewModelScope.launch {
+            val response = MessageService.messageAnalysis()
             status.value = response.Success
             loadingState.value = LoadingState.Loaded
             if (!response.Success)
